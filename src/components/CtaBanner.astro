@@ -12,8 +12,16 @@ interface Props {
   title: string;
   intro?: string;
   id?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
 }
-const { title, intro, id = 'cta' } = Astro.props;
+const {
+  title,
+  intro,
+  id = 'cta',
+  primaryLabel = cta.label,
+  primaryHref = cta.href,
+} = Astro.props;
 ---
 <section class="bg-white py-20 md:py-24" aria-labelledby={`${id}-title`}>
   <div class="container-page">
@@ -27,7 +35,7 @@ const { title, intro, id = 'cta' } = Astro.props;
         <h2 id={`${id}-title`} class="text-h2 font-semibold"><Fragment set:html={title} /></h2>
         {intro && <p class="mt-4 text-lead text-white/75">{intro}</p>}
         <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Button href={cta.href} size="lg" variant="primary">{cta.label}</Button>
+          <Button href={primaryHref} size="lg" variant="primary">{primaryLabel}</Button>
           <a href={contact.phoneHref} class="inline-flex min-h-12 items-center gap-2 rounded-full px-6 py-4 font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/10 focus-visible:outline-cyan">
             <Icon name="phone" size={18} class="text-cyan" /> {contact.phone}
           </a>

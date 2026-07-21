@@ -1,8 +1,134 @@
 ---
-import PageStub from '~/components/PageStub.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionDivider from '~/components/SectionDivider.astro';
+import SectionHeading from '~/components/SectionHeading.astro';
+import CtaBanner from '~/components/CtaBanner.astro';
+import Reveal from '~/components/Reveal.astro';
+import Button from '~/components/Button.astro';
+import Icon from '~/components/Icon.astro';
+
+const benefits = [
+  {
+    icon: 'users',
+    title: 'Inclusive & Supportive Culture',
+    text: 'Our workplace is built on respect, integrity, and collaboration. We foster a culture of inclusion where every team member’s contribution is valued, and everyone works together to achieve our mission.',
+  },
+  {
+    icon: 'star',
+    title: 'Professional Development',
+    text: 'We are committed to the growth of our team members, with access to ongoing training, education opportunities, and career advancement paths to help you reach your professional goals.',
+  },
+  {
+    icon: 'shield',
+    title: 'Competitive Pay & Benefits',
+    text: 'We offer competitive salaries and a comprehensive benefits package — health, dental, and vision insurance, paid time off, retirement plans, and more.',
+  },
+  {
+    icon: 'compass',
+    title: 'Flexibility & Work-Life Balance',
+    text: 'We offer flexible hours to accommodate your personal and professional needs. Whether you’re looking for full-time, part-time, or flexible scheduling, we have opportunities that fit your lifestyle.',
+  },
+];
 ---
-<PageStub
+<BaseLayout
   title="Work With Us"
-  eyebrow="Careers"
-  description="Join a team dedicated to empowering individuals with disabilities. Discover open positions, benefits, and our culture."
-/>
+  description="Build a rewarding career at Inclusion Oriented in Omaha, NE. Join a compassionate team empowering individuals with disabilities — with great benefits, training, and flexibility."
+>
+  <PageHero
+    eyebrow="Careers"
+    title={`Empower lives, <span class="text-gradient">including yours.</span>`}
+    intro="At Inclusion Oriented, you become part of a compassionate community committed to comprehensive support, fostering independence, and community inclusion. Discover a rewarding career where your passion and skills make a real difference."
+  >
+    <div class="mt-9 flex flex-wrap gap-3">
+      <Button href="/apply/" size="lg" variant="primary">Apply today</Button>
+      <Button href="#why" size="lg" variant="invert" icon="arrow">Why work with us</Button>
+    </div>
+  </PageHero>
+
+  <SectionDivider />
+
+  <!-- Make a Difference -->
+  <section class="bg-white py-20 md:py-28" aria-labelledby="impact-title">
+    <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <Reveal class="relative order-last lg:order-first">
+        <div class="overflow-hidden rounded-2xl shadow-2xl ring-1 ring-charcoal/5">
+          <img
+            src="/images/wwu-professional.webp"
+            alt="Two Inclusion Oriented team members walking and talking together"
+            width="1200"
+            height="800"
+            loading="lazy"
+            decoding="async"
+            class="aspect-[4/3] w-full object-cover"
+          />
+        </div>
+        <div class="absolute -left-4 -top-4 -z-10 h-32 w-32 rounded-2xl bg-brand-gradient opacity-20 blur-2xl" aria-hidden="true"></div>
+      </Reveal>
+
+      <Reveal>
+        <span class="mb-3 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-gradient-ink">Make a Difference Every Day</span>
+        <h2 id="impact-title" class="text-h2 font-semibold text-charcoal">Empowered to change lives — starting with your own.</h2>
+        <p class="mt-5 text-lead text-steel">
+          Working with us means the opportunity to positively impact the lives of individuals with
+          disabilities. Your dedication and compassion will help foster independence and promote
+          community inclusion — meaningful work you can feel every single day.
+        </p>
+        <div class="mt-8">
+          <Button href="/apply/" variant="secondary">See how to apply</Button>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- Why Work With Us -->
+  <section id="why" class="scroll-mt-28 bg-fog py-20 md:py-28" aria-labelledby="why-title">
+    <div class="container-page">
+      <SectionHeading
+        titleId="why-title"
+        eyebrow="Why Work With Us"
+        title="A career with real purpose &mdash; and real support"
+        intro="We believe in the power of inclusion, empowerment, and innovation. Here are a few reasons to consider joining our team."
+      />
+      <div class="mt-14 grid gap-5 sm:grid-cols-2">
+        {benefits.map((b) => (
+          <Reveal>
+            <div class="flex h-full gap-5 rounded-2xl bg-white p-7 shadow-sm ring-1 ring-charcoal/8">
+              <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white shadow-lg">
+                <Icon name={b.icon} size={26} />
+              </span>
+              <div>
+                <h3 class="text-h3 font-semibold text-charcoal">{b.title}</h3>
+                <p class="mt-2 leading-relaxed text-steel">{b.text}</p>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="relative overflow-hidden bg-charcoal py-20 text-white md:py-24" aria-label="Inspiration">
+    <div class="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/10 blur-3xl" aria-hidden="true"></div>
+    <div class="container-page relative">
+      <Reveal class="mx-auto max-w-3xl text-center">
+        <Icon name="quote" size={40} class="mx-auto text-cyan" />
+        <blockquote class="mt-5 font-display text-h2 font-medium leading-tight">
+          It always seems impossible until it&rsquo;s done.
+        </blockquote>
+        <figcaption class="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-white/60">— Nelson Mandela</figcaption>
+      </Reveal>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <CtaBanner
+    id="wwu-cta"
+    title={`Start making a difference <span class="text-gradient">today.</span>`}
+    intro="Ready to join a team that's changing lives across Omaha? We'd love to meet you."
+    primaryLabel="Apply Today"
+    primaryHref="/apply/"
+  />
+</BaseLayout>
