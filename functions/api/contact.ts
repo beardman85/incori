@@ -20,14 +20,22 @@ interface Env {
 const FIELD_LABELS: Record<string, string> = {
   formType: 'Form',
   name: 'Name',
+  firstName: 'First name',
+  lastName: 'Last name',
   email: 'Email',
   phone: 'Phone',
-  service: 'Service of interest',
   who: 'Requesting for',
+  dob: 'Date of birth',
+  service: 'Service of interest',
+  city: 'City / area',
+  startDate: 'Preferred start date',
+  caseManager: 'Has case manager / coordinator',
+  hearAbout: 'Heard about us via',
   role: 'Role of interest',
   availability: 'Availability',
   interest: 'Area of interest',
   message: 'Message',
+  consent: 'Consent given',
 };
 
 const FORM_TITLES: Record<string, string> = {
@@ -59,7 +67,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
   // Honeypot — silently accept and drop.
   if (body.company) return json({ ok: true, delivered: false });
 
-  const name = (body.name || '').trim();
+  const name = (body.name || `${body.firstName || ''} ${body.lastName || ''}`).trim();
   const email = (body.email || '').trim();
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return json({ ok: false, error: 'Please provide your name and a valid email.' }, 422);

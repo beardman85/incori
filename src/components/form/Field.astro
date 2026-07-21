@@ -1,11 +1,13 @@
 ---
 /**
- * Styled form field: text / email / tel / textarea / select.
+ * Styled form field: text / email / tel / date / textarea / select / radio / checkbox.
+ * All controls share a visible border so they read consistently (native <select>
+ * doesn't render ring shadows reliably).
  */
 interface Props {
   name: string;
   label: string;
-  type?: 'text' | 'email' | 'tel' | 'textarea' | 'select';
+  type?: 'text' | 'email' | 'tel' | 'date' | 'textarea' | 'select' | 'radio' | 'checkbox';
   required?: boolean;
   placeholder?: string;
   autocomplete?: string;
@@ -13,6 +15,7 @@ interface Props {
   value?: string;
   options?: { value: string; label: string }[];
   full?: boolean;
+  help?: string;
 }
 const {
   name,
@@ -25,30 +28,62 @@ const {
   value = '',
   options = [],
   full = false,
+  help,
 } = Astro.props;
 const id = `f-${name}`;
 const control =
-  'w-full rounded-xl bg-white px-4 py-3 text-charcoal ring-1 ring-charcoal/15 transition-shadow placeholder:text-steel/60 focus:outline-none focus:ring-2 focus:ring-azure';
+  'w-full rounded-xl border border-charcoal/15 bg-white px-4 py-3 text-charcoal transition placeholder:text-steel/50 focus:border-azure focus:outline-none focus:ring-4 focus:ring-azure/15';
+const colSpan = full ? 'sm:col-span-2' : '';
 ---
-<div class:list={[full ? 'sm:col-span-2' : '']}>
-  <label for={id} class="mb-1.5 block text-sm font-medium text-charcoal">
-    {label}{required && <span class="text-ember"> *</span>}
-  </label>
+{
+  type === 'checkbox' ? (
+    <div class={colSpan}>
+      <label class="flex cursor-pointer items-start gap-3 text-[0.95rem] leading-relaxed text-charcoal">
+        <input id={id} name={name} type="checkbox" value="yes" required={required} class="mt-0.5 h-5 w-5 shrink-0 rounded border-charcoal/30 accent-azure focus:outline-none focus-visible:outline-2 focus-visible:outline-azure" />
+        <span><Fragment set:html={label} />{required && <span class="text-ember"> *</span>}</span>
+      </label>
+    </div>
+  ) : type === 'radio' ? (
+    <fieldset class={colSpan}>
+      <legend class="mb-2 block text-sm font-medium text-charcoal">
+        {label}{required && <span class="text-ember"> *</span>}
+      </legend>
+      <div class="flex flex-wrap gap-2.5">
+        {options.map((o, i) => (
+          <label class="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-charcoal/15 bg-white px-4 py-2.5 text-[0.95rem] text-charcoal transition hover:border-charcoal/35 has-[:checked]:border-azure has-[:checked]:bg-azure/5 has-[:checked]:font-medium">
+            <input type="radio" name={name} value={o.value} required={required && i === 0} class="h-4 w-4 accent-azure" />
+            {o.label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  ) : (
+    <div class={colSpan}>
+      <label for={id} class="mb-1.5 block text-sm font-medium text-charcoal">
+        {label}{required && <span class="text-ember"> *</span>}
+      </label>
 
-  {type === 'textarea' && (
-    <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} class={control}>{value}</textarea>
-  )}
+      {type === 'textarea' && (
+        <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} class={control}>{value}</textarea>
+      )}
 
-  {type === 'select' && (
-    <select id={id} name={name} required={required} class={control}>
-      <option value="" disabled selected={!value}>{placeholder ?? 'Select an option'}</option>
-      {options.map((o) => (
-        <option value={o.value} selected={value === o.value}>{o.label}</option>
-      ))}
-    </select>
-  )}
+      {type === 'select' && (
+        <div class="relative">
+          <select id={id} name={name} required={required} class={`${control} cursor-pointer appearance-none pr-11`}>
+            <option value="" disabled selected={!value}>{placeholder ?? 'Select an option'}</option>
+            {options.map((o) => (
+              <option value={o.value} selected={value === o.value}>{o.label}</option>
+            ))}
+          </select>
+          <svg class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-steel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </div>
+      )}
 
-  {type !== 'textarea' && type !== 'select' && (
-    <input id={id} name={name} type={type} required={required} placeholder={placeholder} autocomplete={autocomplete} value={value} class={control} />
-  )}
-</div>
+      {type !== 'textarea' && type !== 'select' && (
+        <input id={id} name={name} type={type} required={required} placeholder={placeholder} autocomplete={autocomplete} value={value} class={control} />
+      )}
+
+      {help && <p class="mt-1.5 text-xs text-steel">{help}</p>}
+    </div>
+  )
+}

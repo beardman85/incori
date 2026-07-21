@@ -44,12 +44,19 @@ const steps = [
           successTitle="Request received!"
           successMessage="Thank you — our team will reach out shortly to help you get started."
         >
-          <Field name="name" label="Full name" required autocomplete="name" placeholder="Jane Doe" />
+          <Field name="firstName" label="First name" required autocomplete="given-name" placeholder="Jane" />
+          <Field name="lastName" label="Last name" required autocomplete="family-name" placeholder="Doe" />
           <Field name="email" label="Email" type="email" required autocomplete="email" placeholder="jane@example.com" />
           <Field name="phone" label="Phone" type="tel" required autocomplete="tel" placeholder="(531) 555-0123" />
-          <Field name="who" label="Who is this for?" type="select" placeholder="Select one" options={[{ value: 'myself', label: 'Myself' }, { value: 'loved-one', label: 'A loved one' }]} />
+          <Field name="who" label="Who is this request for?" type="select" placeholder="Select one" options={[{ value: 'myself', label: 'Myself' }, { value: 'loved-one', label: 'A loved one' }, { value: 'provider', label: 'A client (case manager / provider)' }]} />
+          <Field name="dob" label="Date of birth" type="date" help="Of the person who would receive services" />
           <Field name="service" label="Service of interest" type="select" full placeholder="Select a service" options={serviceOptions} />
-          <Field name="message" label="How can we help?" type="textarea" full placeholder="Tell us a bit about your needs or questions…" />
+          <Field name="city" label="City / area" placeholder="Omaha, NE" autocomplete="address-level2" />
+          <Field name="startDate" label="Preferred start date" type="date" />
+          <Field name="caseManager" label="Do you currently have a case manager or service coordinator?" type="radio" full options={[{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }, { value: 'not-sure', label: 'Not sure' }]} />
+          <Field name="hearAbout" label="How did you hear about us?" type="select" full placeholder="Select one (optional)" options={[{ value: 'search', label: 'Google / search' }, { value: 'referral', label: 'Friend or family' }, { value: 'provider', label: 'Case manager or provider' }, { value: 'social', label: 'Social media' }, { value: 'event', label: 'Community event' }, { value: 'other', label: 'Other' }]} />
+          <Field name="message" label="How can we help?" type="textarea" full placeholder="Tell us a bit about your needs, goals, or any questions…" />
+          <Field name="consent" label={`I agree to be contacted about my request and accept the <a href="/privacy-policy/" class="font-medium text-cyan-deep hover:underline">Privacy Policy</a>.`} type="checkbox" required full />
         </LeadForm>
       </div>
 
