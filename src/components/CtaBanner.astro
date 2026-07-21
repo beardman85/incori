@@ -1,0 +1,38 @@
+---
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import HexMark from './HexMark.astro';
+import Reveal from './Reveal.astro';
+import { cta, contact } from '~/lib/site';
+/**
+ * Reusable closing call-to-action band (dark rounded card, ghost emblem, glow).
+ * `title` accepts inline HTML for a text-gradient accent.
+ */
+interface Props {
+  title: string;
+  intro?: string;
+  id?: string;
+}
+const { title, intro, id = 'cta' } = Astro.props;
+---
+<section class="bg-white py-20 md:py-24" aria-labelledby={`${id}-title`}>
+  <div class="container-page">
+    <Reveal class="relative overflow-hidden rounded-3xl bg-charcoal px-6 py-16 text-center text-white shadow-2xl md:px-16 md:py-20">
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-brand-gradient" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -right-10 -top-10 w-56 opacity-20 md:w-72" aria-hidden="true">
+        <HexMark id={`${id}-hex`} />
+      </div>
+      <div class="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-cyan/15 blur-3xl" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-2xl">
+        <h2 id={`${id}-title`} class="text-h2 font-semibold"><Fragment set:html={title} /></h2>
+        {intro && <p class="mt-4 text-lead text-white/75">{intro}</p>}
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Button href={cta.href} size="lg" variant="primary">{cta.label}</Button>
+          <a href={contact.phoneHref} class="inline-flex min-h-12 items-center gap-2 rounded-full px-6 py-4 font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/10 focus-visible:outline-cyan">
+            <Icon name="phone" size={18} class="text-cyan" /> {contact.phone}
+          </a>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
