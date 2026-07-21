@@ -1,19 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/PageHero.astro';
 import SectionDivider from '~/components/SectionDivider.astro';
+import CtaBanner from '~/components/CtaBanner.astro';
 import Reveal from '~/components/Reveal.astro';
-import Button from '~/components/Button.astro';
-import Icon from '~/components/Icon.astro';
-import HexMark from '~/components/HexMark.astro';
-import { cta, contact } from '~/lib/site';
+import ServiceCard from '~/components/home/ServiceCard.astro';
 
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
-// Pre-render each service's markdown body
-const rendered = await Promise.all(
-  services.map(async (s) => ({ ...s, Body: (await render(s)).Content }))
-);
 ---
 <BaseLayout
   title="Services"
@@ -23,99 +17,35 @@ const rendered = await Promise.all(
     eyebrow="What We Offer"
     title={`Support for every part of <span class="text-gradient">daily life.</span>`}
     intro="At Inclusion Oriented, we offer a comprehensive range of services designed to meet the unique needs of individuals with physical and mental impairments — each one person-centered, and built to foster independence, dignity, and community."
-  >
-    <!-- Quick-jump chips -->
-    <nav class="mt-9 flex flex-wrap gap-2.5" aria-label="Jump to a service">
-      {services.map((s) => (
-        <a
-          href={`#${s.id}`}
-          class="inline-flex items-center gap-2 rounded-full bg-white/8 px-4 py-2 text-sm font-medium text-white/80 ring-1 ring-white/12 transition-all hover:bg-white/15 hover:text-white focus-visible:outline-cyan"
-        >
-          <Icon name={s.data.icon} size={16} class="text-cyan" />
-          {s.data.title}
-        </a>
-      ))}
-    </nav>
-  </PageHero>
+  />
 
   <SectionDivider />
 
-  <!-- Service detail sections (alternating) -->
-  {rendered.map((s, i) => {
-    const even = i % 2 === 0;
-    return (
-      <section
-        id={s.id}
-        class:list={['scroll-mt-28 py-16 md:py-24', even ? 'bg-white' : 'bg-fog']}
-        aria-labelledby={`${s.id}-h`}
-      >
-        <div class="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <!-- Image -->
-          <Reveal class:list={[even ? 'lg:order-first' : 'lg:order-last']}>
-            <div class="relative">
-              <div class="overflow-hidden rounded-2xl shadow-xl ring-1 ring-charcoal/8">
-                <img
-                  src={s.data.image}
-                  alt={s.data.imageAlt ?? ''}
-                  width="1200"
-                  height="800"
-                  loading="lazy"
-                  decoding="async"
-                  class="aspect-[3/2] w-full object-cover"
-                />
-              </div>
-              <span class="absolute -bottom-5 left-6 grid h-14 w-14 place-items-center rounded-2xl bg-brand-gradient text-white shadow-lg ring-4 ring-white">
-                <Icon name={s.data.icon} size={26} />
-              </span>
-            </div>
-          </Reveal>
-
-          <!-- Copy -->
-          <Reveal>
-            {s.data.subtitle && (
-              <span class="mb-2 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-gradient-ink">
-                {s.data.subtitle}
-              </span>
-            )}
-            <h2 id={`${s.id}-h`} class="text-h2 font-semibold text-charcoal">{s.data.title}</h2>
-            <div class="rich-text mt-4 text-lead leading-relaxed">
-              <s.Body />
-            </div>
-            <div class="mt-7">
-              <Button href={cta.href} variant="secondary">Request this service</Button>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-    );
-  })}
-
-  <SectionDivider />
-
-  <!-- Closing CTA -->
-  <section class="bg-white py-20 md:py-24" aria-labelledby="services-cta">
+  <!-- Services grid -->
+  <section class="bg-fog py-20 md:py-24" aria-label="All services">
     <div class="container-page">
-      <Reveal class="relative overflow-hidden rounded-3xl bg-charcoal px-6 py-16 text-center text-white shadow-2xl md:px-16 md:py-20">
-        <div class="pointer-events-none absolute -right-10 -top-10 w-56 opacity-20 md:w-72" aria-hidden="true">
-          <HexMark id="services-cta-hex" />
-        </div>
-        <div class="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-cyan/15 blur-3xl" aria-hidden="true"></div>
-        <div class="relative mx-auto max-w-2xl">
-          <h2 id="services-cta" class="text-h2 font-semibold">
-            Not sure which service <span class="text-gradient">fits best?</span>
-          </h2>
-          <p class="mt-4 text-lead text-white/75">
-            Every plan starts with a conversation. Tell us about your needs or your loved
-            one's, and our team will help you find the right support.
-          </p>
-          <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <Button href={cta.href} size="lg" variant="primary">{cta.label}</Button>
-            <a href={contact.phoneHref} class="inline-flex min-h-12 items-center gap-2 rounded-full px-6 py-4 font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/10 focus-visible:outline-cyan">
-              <Icon name="phone" size={18} class="text-cyan" /> {contact.phone}
-            </a>
-          </div>
-        </div>
-      </Reveal>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s, i) => (
+          <Reveal delay={(i % 3) * 80}>
+            <ServiceCard
+              slug={s.id}
+              title={s.data.title}
+              summary={s.data.summary}
+              icon={s.data.icon}
+              image={s.data.image}
+              imageAlt={s.data.imageAlt}
+            />
+          </Reveal>
+        ))}
+      </div>
     </div>
   </section>
+
+  <SectionDivider />
+
+  <CtaBanner
+    id="services-cta"
+    title={`Not sure which service <span class="text-gradient">fits best?</span>`}
+    intro="Every plan starts with a conversation. Tell us about your needs and our team will help you find the right support."
+  />
 </BaseLayout>

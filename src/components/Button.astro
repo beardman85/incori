@@ -6,7 +6,7 @@ import Icon from './Icon.astro';
 interface Props {
   href: string;
   variant?: 'primary' | 'secondary' | 'ghost' | 'invert';
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   icon?: string;
   class?: string;
   [key: string]: unknown;
@@ -23,9 +23,11 @@ const {
 const base =
   'group inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-3 focus-visible:outline-offset-3';
 const sizes: Record<string, string> = {
+  sm: 'px-4 py-2 text-sm min-h-10',
   md: 'px-6 py-3 text-[0.95rem] min-h-11',
   lg: 'px-8 py-4 text-base min-h-12',
 };
+const iconSize = size === 'sm' ? 15 : 18;
 const variants: Record<string, string> = {
   primary:
     'bg-brand-gradient text-white shadow-lg shadow-cyan-deep/20 hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-azure',
@@ -40,5 +42,5 @@ const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
 ---
 <a href={href} class={cls} {...rest}>
   <slot />
-  {icon && <Icon name={icon} size={18} class="transition-transform duration-300 group-hover:translate-x-0.5" />}
+  {icon && <Icon name={icon} size={iconSize} class="transition-transform duration-300 group-hover:translate-x-0.5" />}
 </a>

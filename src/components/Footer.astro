@@ -64,7 +64,7 @@ const socialPaths: Record<string, string> = {
         <ul class="mt-5 grid grid-cols-1 gap-x-8 gap-y-2.5 sm:grid-cols-2">
           {services.map((s) => (
             <li>
-              <a href={`/services/#${s.id}`} class="text-white/70 transition-colors hover:text-white focus-visible:outline-cyan">
+              <a href={`/services/${s.id}/`} class="text-white/70 transition-colors hover:text-white focus-visible:outline-cyan">
                 {s.data.title}
               </a>
             </li>

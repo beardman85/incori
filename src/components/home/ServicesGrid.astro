@@ -22,7 +22,7 @@ const services = (await getCollection('services'))
       {services.map((s, i) => (
         <Reveal delay={(i % 3) * 80}>
           <ServiceCard
-            href={`/services/#${s.id}`}
+            slug={s.id}
             title={s.data.title}
             summary={s.data.summary}
             icon={s.data.icon}
