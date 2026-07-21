@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from '~/components/SectionHeading.astro';
+import Icon from '~/components/Icon.astro';
+import Reveal from '~/components/Reveal.astro';
+
+const values = (await getCollection('values')).sort((a, b) => a.data.order - b.data.order);
+---
+<section class="relative overflow-hidden bg-charcoal py-20 text-white md:py-28" aria-labelledby="values-title">
+  <!-- ambient glow -->
+  <div class="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-azure/10 blur-3xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute bottom-0 left-1/4 h-80 w-80 rounded-full bg-ember/10 blur-3xl" aria-hidden="true"></div>
+
+  <!-- Soft fades easing the dark band into the light sections above & below -->
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-28 fade-fog-down" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 fade-fog-up" aria-hidden="true"></div>
+
+  <div class="container-page relative">
+    <SectionHeading
+      titleId="values-title"
+      eyebrow="Our Values"
+      title="What guides everything we do"
+      intro="Five commitments shape our care — and hold us to a higher standard for the people and families we serve."
+      invert
+    />
+
+    <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {values.map((v, i) => (
+        <Reveal delay={(i % 3) * 80}>
+          <div class="group h-full rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 transition-colors duration-300 hover:bg-white/[0.08]">
+            <span class="grid h-12 w-12 place-items-center rounded-xl bg-brand-gradient text-white shadow-lg">
+              <Icon name={v.data.icon} size={24} />
+            </span>
+            <h3 class="mt-5 text-h3 font-semibold text-white">{v.data.title}</h3>
+            <p class="mt-2 text-[0.98rem] leading-relaxed text-white/65">{v.data.summary}</p>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

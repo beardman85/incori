@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from '~/components/SectionHeading.astro';
+import ServiceCard from './ServiceCard.astro';
+import Reveal from '~/components/Reveal.astro';
+import Button from '~/components/Button.astro';
+
+const services = (await getCollection('services'))
+  .filter((s) => s.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<section id="services" class="bg-fog py-20 md:py-28" aria-labelledby="services-title">
+  <div class="container-page">
+    <SectionHeading
+      titleId="services-title"
+      eyebrow="Our Services"
+      title="Comprehensive support, tailored to every individual"
+      intro="From daily living to employment, community, and independent living — we offer a full range of services designed to meet each person's unique needs and goals."
+    />
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((s, i) => (
+        <Reveal delay={(i % 3) * 80}>
+          <ServiceCard
+            href={`/services/#${s.id}`}
+            title={s.data.title}
+            summary={s.data.summary}
+            icon={s.data.icon}
+            image={s.data.image}
+            imageAlt={s.data.imageAlt}
+          />
+        </Reveal>
+      ))}
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <Button href="/services/" variant="secondary" size="lg">Explore all services</Button>
+    </div>
+  </div>
+</section>

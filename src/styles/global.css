@@ -1,0 +1,195 @@
+@import 'tailwindcss';
+
+/* Self-hosted variable fonts (no external requests) */
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/inter';
+
+/* ------------------------------------------------------------------ *
+ * Inclusion Oriented — Brand design tokens
+ * Palette recovered from the brand mark + WordPress export.
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Core neutrals */
+  --color-ink: #0c0d0e;        /* near-black background */
+  --color-charcoal: #161b1d;   /* dark section base */
+  --color-slate: #222b2f;      /* muted dark surface */
+  --color-steel: #55606a;      /* muted text on light */
+  --color-fog: #f5f7fa;        /* light section base */
+  --color-mist: #e6ebf1;       /* light borders/surfaces */
+  --color-cloud: #ffffff;
+
+  /* Brand gradient stops — exact values from the logo (Logo.ai) */
+  --color-cyan: #1feaf7;      /* stop 1 — bright cyan (accents on dark) */
+  --color-cyan-deep: #0076d6; /* stop 2 — brand blue (text/accent on light, 4.6:1 on white) */
+  --color-azure: #0076d6;     /* alias brand blue — focus ring / ambient glows */
+  --color-crimson: #b52b2b;   /* stop 3 — deep red */
+  --color-ember: #f15b5d;     /* stop 4 — coral */
+  --color-amber: #ffb847;     /* stop 5 — amber */
+
+  /* Fonts */
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Fluid type scale (clamp-based) */
+  --text-hero: clamp(2.75rem, 1.6rem + 5.6vw, 6rem);
+  --text-h1: clamp(2.25rem, 1.5rem + 3.4vw, 4rem);
+  --text-h2: clamp(1.75rem, 1.25rem + 2.2vw, 3rem);
+  --text-h3: clamp(1.3rem, 1.05rem + 1.1vw, 1.75rem);
+  --text-lead: clamp(1.1rem, 1rem + 0.5vw, 1.375rem);
+
+  /* Radii */
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+
+  /* Layout */
+  --width-content: 76rem;
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base + accessibility
+ * ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: light;
+    /* Full brand gradient — for fills + text on dark backgrounds */
+    --brand-gradient: linear-gradient(
+      100deg,
+      #1feaf7 0%,
+      #0076d6 31%,
+      #b52b2b 63%,
+      #f15b5d 79%,
+      #ffb847 98%
+    );
+    /* Legible variant — for small gradient text on LIGHT backgrounds (blue→red, both ≥4.5:1 on white) */
+    --brand-gradient-ink: linear-gradient(100deg, #0076d6 0%, #b52b2b 100%);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem; /* offset sticky header for anchor links */
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-cloud);
+    color: var(--color-charcoal);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* Visible, high-contrast focus for keyboard users */
+  :focus-visible {
+    outline: 3px solid var(--color-azure);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Respect reduced-motion: kill all animation + smooth scroll */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Reusable brand utilities
+ * ------------------------------------------------------------------ */
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: var(--width-content);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .text-gradient {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Legible gradient text for LIGHT backgrounds (small text, eyebrows, stats) */
+  .text-gradient-ink {
+    background: var(--brand-gradient-ink);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .bg-brand-gradient { background-image: var(--brand-gradient); }
+
+  /* ---- Soft transitions between dark and light section bands ---- */
+  /* Eased fade to white (stays subtle, then ramps) — softens a dark→white edge */
+  .fade-to-white {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.04) 34%,
+      rgba(255, 255, 255, 0.22) 60%,
+      rgba(255, 255, 255, 0.62) 82%,
+      #ffffff 100%
+    );
+  }
+  /* Fog (#f5f7fa) fading downward into transparent — eases the TOP edge of a dark band */
+  .fade-fog-down {
+    background: linear-gradient(to bottom, #f5f7fa 0%, rgba(245, 247, 250, 0.55) 45%, rgba(245, 247, 250, 0) 100%);
+  }
+  /* Fog fading upward into transparent — eases the BOTTOM edge of a dark band */
+  .fade-fog-up {
+    background: linear-gradient(to top, #f5f7fa 0%, rgba(245, 247, 250, 0.55) 45%, rgba(245, 247, 250, 0) 100%);
+  }
+
+  /* Skip link — hidden until focused */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 100;
+    background: var(--color-charcoal);
+    color: var(--color-cloud);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: top 0.2s var(--ease-out-expo);
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* Scroll-reveal: hidden state before the IntersectionObserver toggles it */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1; transform: none; }
+  }
+}

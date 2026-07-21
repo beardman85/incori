@@ -1,0 +1,67 @@
+---
+import { cta } from '~/lib/site';
+import Button from '~/components/Button.astro';
+import Icon from '~/components/Icon.astro';
+import Reveal from '~/components/Reveal.astro';
+
+const highlights = [
+  'Person-centered support tailored to each individual',
+  'Certified under the Nebraska HCBS Waiver program',
+  'A dedicated, experienced team of professionals',
+];
+---
+<section class="bg-white py-20 md:py-28" aria-labelledby="mission-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <!-- Visual -->
+    <Reveal class="relative order-last lg:order-first">
+      <div class="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-charcoal/5">
+        <img
+          src="/images/working-together.webp"
+          alt="Members of the Inclusion Oriented team supporting one another"
+          width="1200"
+          height="800"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      <!-- Floating stat badge -->
+      <div class="absolute -bottom-6 -right-4 rounded-2xl bg-charcoal p-5 text-white shadow-xl sm:-right-6 sm:p-6">
+        <div class="text-4xl font-semibold text-gradient font-display">10+</div>
+        <div class="mt-1 text-sm text-white/70">specialized services<br />under one provider</div>
+      </div>
+      <!-- Gradient accent -->
+      <div class="absolute -left-4 -top-4 -z-10 h-32 w-32 rounded-2xl bg-brand-gradient opacity-20 blur-2xl" aria-hidden="true"></div>
+    </Reveal>
+
+    <!-- Copy -->
+    <Reveal>
+      <span class="mb-3 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-gradient-ink">
+        About Inclusion Oriented
+      </span>
+      <h2 id="mission-title" class="text-h2 font-semibold text-charcoal">
+        A ground for strength, independence, and belonging.
+      </h2>
+      <p class="mt-5 text-lead text-steel">
+        We are dedicated to enhancing the quality of life for individuals with physical and
+        mental impairments. Our mission is to create a more inclusive world — where every
+        person we serve has the opportunity to live a fulfilling, independent life as a
+        vital member of their community.
+      </p>
+      <ul class="mt-7 space-y-3">
+        {highlights.map((h) => (
+          <li class="flex items-start gap-3 text-charcoal">
+            <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-gradient text-white">
+              <Icon name="check" size={15} />
+            </span>
+            <span class="text-[1.02rem]">{h}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href="/about/" variant="secondary">Our Story</Button>
+        <Button href={cta.href} variant="ghost">{cta.label}</Button>
+      </div>
+    </Reveal>
+  </div>
+</section>

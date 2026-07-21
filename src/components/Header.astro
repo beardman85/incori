@@ -1,0 +1,119 @@
+---
+import { primaryNav, cta, site } from '~/lib/site';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+<header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300" data-header>
+  <div class="container-page">
+    <div
+      class="mt-3 flex items-center justify-between gap-4 rounded-2xl px-4 py-2.5 bg-white/65 shadow-lg shadow-charcoal/5 ring-1 ring-white/50 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300 md:px-5"
+      data-header-bar
+    >
+      <!-- Logo -->
+      <a href="/" class="flex shrink-0 items-center gap-2 rounded-lg px-1 py-1.5 focus-visible:outline-azure" aria-label={`${site.name} home`}>
+        <img src="/logos/logo-horizontal.png" alt={site.name} width="520" height="140" class="h-10 w-auto md:h-11" />
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        {primaryNav.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              'rounded-full px-4 py-2 text-[0.95rem] font-medium transition-colors focus-visible:outline-azure',
+              isActive(link.href)
+                ? 'text-charcoal'
+                : 'text-steel hover:text-charcoal',
+            ]}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <span class="hidden sm:contents"><Button href={cta.href} size="md">{cta.label}</Button></span>
+        <!-- Mobile toggle -->
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-charcoal ring-1 ring-charcoal/15 transition-colors hover:bg-charcoal/5 focus-visible:outline-azure lg:hidden"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-menu-toggle
+        >
+          <Icon name="menu" size={24} class="block" data-menu-open-icon />
+          <Icon name="close" size={24} class="hidden" data-menu-close-icon />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div
+    id="mobile-menu"
+    class="container-page hidden lg:hidden"
+    data-mobile-menu
+  >
+    <nav
+      class="mt-2 flex flex-col gap-1 rounded-2xl bg-white p-4 shadow-xl ring-1 ring-charcoal/10"
+      aria-label="Mobile"
+    >
+      {primaryNav.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'rounded-xl px-4 py-3 text-lg font-medium transition-colors focus-visible:outline-azure',
+            isActive(link.href) ? 'bg-fog text-charcoal' : 'text-steel hover:bg-fog hover:text-charcoal',
+          ]}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+      <Button href={cta.href} size="lg" class="mt-2 w-full">{cta.label}</Button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Frosted-glass bar is always on; deepen the shadow slightly once scrolled.
+  const header = document.querySelector('[data-header-bar]');
+  const onScroll = () => {
+    if (!header) return;
+    const scrolled = window.scrollY > 12;
+    header.classList.toggle('shadow-xl', scrolled);
+    header.classList.toggle('shadow-lg', !scrolled);
+    header.classList.toggle('bg-white/80', scrolled);
+    header.classList.toggle('bg-white/65', !scrolled);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu toggle
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+  const openIcon = document.querySelector('[data-menu-open-icon]');
+  const closeIcon = document.querySelector('[data-menu-close-icon]');
+  let open = false;
+  const setOpen = (v: boolean) => {
+    open = v;
+    menu?.classList.toggle('hidden', !open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    openIcon?.classList.toggle('hidden', open);
+    openIcon?.classList.toggle('block', !open);
+    closeIcon?.classList.toggle('hidden', !open);
+    closeIcon?.classList.toggle('block', open);
+  };
+  toggle?.addEventListener('click', () => setOpen(!open));
+  // Close on link click + Escape
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) { setOpen(false); (toggle as HTMLElement)?.focus(); }
+  });
+</script>

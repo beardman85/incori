@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import { render } from 'astro:content';
+import Icon from '~/components/Icon.astro';
+import Reveal from '~/components/Reveal.astro';
+import Button from '~/components/Button.astro';
+
+const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
+const ed = team[0];
+const { Content } = await render(ed);
+---
+<section class="bg-white py-20 md:py-28" aria-labelledby="leadership-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+    <!-- Portrait -->
+    <Reveal class="lg:col-span-5">
+      <div class="relative mx-auto max-w-sm">
+        <div class="absolute inset-0 -rotate-3 rounded-3xl bg-brand-gradient opacity-90" aria-hidden="true"></div>
+        <img
+          src={ed.data.photo}
+          alt={`${ed.data.name}, ${ed.data.role}`}
+          width="600"
+          height="720"
+          loading="lazy"
+          decoding="async"
+          class="relative aspect-[5/6] w-full rounded-3xl object-cover object-top shadow-2xl ring-1 ring-charcoal/5"
+        />
+      </div>
+    </Reveal>
+
+    <!-- Bio + quote -->
+    <Reveal class="lg:col-span-7">
+      <span class="mb-3 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-gradient-ink">
+        Meet Our Team
+      </span>
+      <h2 id="leadership-title" class="text-h2 font-semibold text-charcoal">{ed.data.name}</h2>
+      <p class="mt-1 text-lead font-medium text-cyan-deep">{ed.data.role}</p>
+
+      <div class="prose-invert mt-5 max-w-xl text-lead leading-relaxed text-steel">
+        <Content />
+      </div>
+
+      <!-- Pull quote -->
+      <figure class="mt-8 rounded-2xl border-l-4 border-cyan bg-fog p-6">
+        <Icon name="quote" size={28} class="text-cyan-deep" />
+        <blockquote class="mt-2 text-h3 font-display font-medium text-charcoal">
+          It always seems impossible until it's done.
+        </blockquote>
+        <figcaption class="mt-3 text-sm font-semibold uppercase tracking-wider text-steel">— Nelson Mandela</figcaption>
+      </figure>
+
+      <div class="mt-8">
+        <Button href="/about/" variant="secondary">More about us</Button>
+      </div>
+    </Reveal>
+  </div>
+</section>

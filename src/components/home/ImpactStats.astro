@@ -1,0 +1,24 @@
+---
+import { site } from '~/lib/site';
+import Reveal from '~/components/Reveal.astro';
+
+const yearsServing = new Date().getFullYear() - site.foundedYear;
+const stats = [
+  { value: `${yearsServing}+`, label: 'Years serving Omaha families' },
+  { value: '10', label: 'Specialized support services' },
+  { value: '100%', label: 'Person-centered approach' },
+  { value: '1:1', label: 'Individualized care planning' },
+];
+---
+<section class="bg-fog pb-4 pt-4" aria-label="Our impact at a glance">
+  <div class="container-page">
+    <Reveal class="grid divide-y divide-charcoal/10 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-charcoal/8 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+      {stats.map((s) => (
+        <div class="px-6 py-8 text-center">
+          <div class="font-display text-5xl font-semibold text-gradient-ink">{s.value}</div>
+          <div class="mt-2 text-sm font-medium text-steel">{s.label}</div>
+        </div>
+      ))}
+    </Reveal>
+  </div>
+</section>

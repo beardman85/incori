@@ -1,0 +1,52 @@
+---
+/**
+ * The real Inclusion Oriented emblem (vector, from the brand Logo.svg), used as
+ * a floating "ghost" watermark. Purely ornamental (aria-hidden). Motion gated by
+ * the `animate` prop + reduced-motion.
+ */
+interface Props {
+  class?: string;
+  animate?: boolean;
+  id?: string;
+}
+const { class: className = '', animate = false, id = 'hex' } = Astro.props;
+const gid = `${id}-grad`;
+const EMBLEM =
+  'M2617.15,856.92c-27.87-16.06-293.92-170.05-559.82-323.92-265.91-153.85-531.82-307.71-559.83-323.92l-9.1-5.26-9.23,5.4c-284.11,166.08-811.51,489.28-1096.61,666.04l-8.95,5.55.28,10.53c9.54,324.49,29.72,757.32,45.37,1042.28l89.72-975.47,184.13-102.52c192.54-107.36,391.32-217.97,591.82-331.88-157.84,452.6-191.55,957.54-92.29,1395.79-190.83,79.91-375.97,131.95-550.29,154.85l-153.43,20.18,153.99,15.93c237.46,24.74,799.85-51.47,1408.86-489.87,145.61,124.42,276.28,265.06,388.33,418.05l.28,27.02c-225.09,131.38-448.48,267.61-664.75,399.56-95.84,58.59-191.53,117.02-287.81,175.33l-754.77-316.37c180.16,114.75,516.74,328.04,746.8,466.54l9.1,5.4,9.1-5.13c81.2-45.36,176.9-98.4,364.45-201.35,430.41-236.32,528.96-292.92,707.69-395.73l46.78-26.86,7.96-1116.66,1.43-188.25-9.25-5.27ZM2439.26,1915.28c-283.82-440.81-658.93-752.64-1115.95-927.82,53.9-204.05,112.34-350.93,217.71-546.74l891.7,532.38,6.54,942.18ZM1275.83,1195.92c162.53,45.07,355.76,110.91,603.32,288.65-255.38,221.1-492.41,357.33-629.78,411.94-26.44-221.4-17.63-456.87,26.46-700.59Z';
+---
+<svg
+  viewBox="0 0 3000 3000"
+  class={`hexmark ${animate ? 'hexmark--animate' : ''} ${className}`}
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id={gid} x1="373.61" y1="1500" x2="2626.39" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1feaf7" />
+      <stop offset="0.31" stop-color="#0076d6" />
+      <stop offset="0.63" stop-color="#b52b2b" />
+      <stop offset="0.79" stop-color="#f15b5d" />
+      <stop offset="0.98" stop-color="#ffb847" />
+    </linearGradient>
+  </defs>
+  <path d={EMBLEM} fill={`url(#${gid})`} />
+</svg>
+
+<style>
+  .hexmark {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .hexmark--animate {
+    animation: hex-float 9s var(--ease-out-expo, ease) infinite;
+    transform-origin: center;
+  }
+  @keyframes hex-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(2deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hexmark--animate { animation: none; }
+  }
+</style>

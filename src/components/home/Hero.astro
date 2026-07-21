@@ -1,0 +1,62 @@
+---
+import { cta, contact, site } from '~/lib/site';
+import Button from '~/components/Button.astro';
+import Icon from '~/components/Icon.astro';
+import HexMark from '~/components/HexMark.astro';
+---
+<section class="relative overflow-hidden bg-ink text-white" aria-labelledby="hero-title">
+  <!-- Background photo, faded into the dark on the left for text contrast -->
+  <div class="absolute inset-0" aria-hidden="true">
+    <img
+      src="/images/hero-home.webp"
+      alt=""
+      width="2560"
+      height="923"
+      fetchpriority="high"
+      decoding="async"
+      class="h-full w-full object-cover object-[70%_center]"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/92 to-ink/30"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/40"></div>
+  </div>
+
+  <!-- Ambient gradient glow + floating hex -->
+  <div class="pointer-events-none absolute -left-24 top-1/3 h-96 w-96 rounded-full bg-cyan/20 blur-3xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute right-[6%] top-24 hidden w-40 opacity-35 lg:block xl:w-52" aria-hidden="true">
+    <HexMark animate id="hero-hex" />
+  </div>
+
+  <div class="container-page relative">
+    <div class="flex min-h-[92svh] max-w-2xl flex-col justify-center py-32 md:py-40">
+      <span class="mb-5 inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-cyan ring-1 ring-white/15 backdrop-blur">
+        {site.tagline}
+      </span>
+
+      <h1 id="hero-title" class="text-hero font-semibold leading-[0.98] tracking-tight">
+        Empowering individuals,<br />
+        <span class="text-gradient">strengthening community.</span>
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lead text-white/80">
+        Inclusion Oriented is a certified developmental-disabilities service provider in
+        Omaha, Nebraska — delivering person-centered support that helps every individual
+        live a fuller, more independent life.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <Button href={cta.href} size="lg" variant="primary">{cta.label}</Button>
+        <Button href="/services/" size="lg" variant="invert" icon="arrow">See Our Services</Button>
+      </div>
+
+      <!-- Trust line -->
+      <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/65">
+        <span class="inline-flex items-center gap-2"><Icon name="shield" size={18} class="text-cyan" /> Nebraska DHHS Certified Provider</span>
+        <span class="inline-flex items-center gap-2"><Icon name="star" size={18} class="text-cyan" /> Serving families since {site.foundedYear}</span>
+        <a href={contact.phoneHref} class="inline-flex items-center gap-2 hover:text-white focus-visible:outline-cyan"><Icon name="phone" size={18} class="text-cyan" /> {contact.phone}</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom fade into next section (eased, tall for a soft transition) -->
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-48 fade-to-white" aria-hidden="true"></div>
+</section>

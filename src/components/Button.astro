@@ -1,0 +1,44 @@
+---
+import Icon from './Icon.astro';
+/**
+ * Link-styled button with brand variants.
+ */
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'invert';
+  size?: 'md' | 'lg';
+  icon?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon = 'arrow',
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-3 focus-visible:outline-offset-3';
+const sizes: Record<string, string> = {
+  md: 'px-6 py-3 text-[0.95rem] min-h-11',
+  lg: 'px-8 py-4 text-base min-h-12',
+};
+const variants: Record<string, string> = {
+  primary:
+    'bg-brand-gradient text-white shadow-lg shadow-cyan-deep/20 hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-azure',
+  secondary:
+    'bg-charcoal text-white hover:bg-slate hover:-translate-y-0.5 focus-visible:outline-azure',
+  ghost:
+    'bg-transparent text-charcoal ring-1 ring-charcoal/20 hover:ring-charcoal/50 hover:bg-charcoal/5 focus-visible:outline-azure',
+  invert:
+    'bg-white text-charcoal hover:bg-fog hover:-translate-y-0.5 focus-visible:outline-cyan',
+};
+const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+---
+<a href={href} class={cls} {...rest}>
+  <slot />
+  {icon && <Icon name={icon} size={18} class="transition-transform duration-300 group-hover:translate-x-0.5" />}
+</a>

@@ -1,0 +1,39 @@
+---
+/**
+ * Scroll-reveal wrapper. Renders content visible by default (progressive
+ * enhancement); the [data-reveal] CSS hides it and a tiny IntersectionObserver
+ * script reveals it on scroll. Reduced-motion users see it immediately (CSS).
+ */
+interface Props {
+  as?: string;
+  delay?: number;
+  class?: string;
+}
+const { as = 'div', delay = 0, class: className = '' } = Astro.props;
+const Tag = as as any;
+---
+<Tag data-reveal style={delay ? `transition-delay:${delay}ms` : undefined} class={className}>
+  <slot />
+</Tag>
+
+<script>
+  // Reveal elements as they enter the viewport (once).
+  const els = document.querySelectorAll('[data-reveal]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>

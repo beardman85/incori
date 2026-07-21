@@ -1,0 +1,30 @@
+---
+import Reveal from './Reveal.astro';
+/** Reusable eyebrow + title + intro block. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  align?: 'left' | 'center';
+  invert?: boolean;
+  titleId?: string;
+  class?: string;
+}
+const { eyebrow, title, intro, align = 'center', invert = false, titleId, class: className = '' } = Astro.props;
+const alignCls = align === 'center' ? 'mx-auto text-center items-center' : 'text-left items-start';
+---
+<Reveal class={`flex max-w-2xl flex-col ${alignCls} ${className}`}>
+  {eyebrow && (
+    <span class:list={['mb-3 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em]', invert ? 'text-gradient' : 'text-gradient-ink']}>
+      {eyebrow}
+    </span>
+  )}
+  <h2 id={titleId} class:list={['text-h2 font-semibold', invert ? 'text-white' : 'text-charcoal']}>
+    <Fragment set:html={title} />
+  </h2>
+  {intro && (
+    <p class:list={['mt-4 text-lead leading-relaxed', invert ? 'text-white/70' : 'text-steel']}>
+      {intro}
+    </p>
+  )}
+</Reveal>

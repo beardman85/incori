@@ -1,0 +1,46 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Button from '~/components/Button.astro';
+import Icon from '~/components/Icon.astro';
+import HexMark from '~/components/HexMark.astro';
+import { cta, contact } from '~/lib/site';
+/**
+ * Temporary interior-page template used while full page content is built out.
+ * Reuses the brand system so navigation never dead-ends during the migration.
+ */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+}
+const { title, eyebrow, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <section class="relative overflow-hidden bg-ink text-white">
+    <div class="pointer-events-none absolute -left-24 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-cyan/15 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute right-[8%] top-24 hidden w-40 opacity-30 lg:block" aria-hidden="true">
+      <HexMark animate id="stub-hex" />
+    </div>
+    <div class="container-page relative flex min-h-[70svh] max-w-3xl flex-col justify-center py-32">
+      {eyebrow && (
+        <span class="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-cyan ring-1 ring-white/15">
+          {eyebrow}
+        </span>
+      )}
+      <h1 class="text-h1 font-semibold leading-[1] tracking-tight">{title}</h1>
+      {description && <p class="mt-5 max-w-xl text-lead text-white/80">{description}</p>}
+
+      <div class="mt-8 inline-flex w-fit items-center gap-2 rounded-xl bg-white/5 px-4 py-2.5 text-sm text-white/70 ring-1 ring-white/10">
+        <Icon name="star" size={16} class="text-cyan" />
+        Full page content is on the way — check back soon.
+      </div>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href={cta.href} size="lg" variant="primary">{cta.label}</Button>
+        <a href={contact.phoneHref} class="inline-flex min-h-12 items-center gap-2 rounded-full px-6 py-4 font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/10 focus-visible:outline-cyan">
+          <Icon name="phone" size={18} class="text-cyan" /> {contact.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
