@@ -1,6 +1,6 @@
 # Cloudflare Pages configuration for Inclusion Oriented (incori.org)
 # The site builds to ./dist (static). Pages Functions live in ./functions.
-name = "incori-web"
+name = "incori"
 compatibility_date = "2025-01-01"
 pages_build_output_dir = "dist"
 
