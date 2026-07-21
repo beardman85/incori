@@ -1,0 +1,43 @@
+---
+/**
+ * Full-bleed brand-gradient divider with a slow shimmer sweep.
+ * Decorative; the shimmer is disabled for reduced-motion users.
+ */
+---
+<div class="section-divider" role="presentation" aria-hidden="true"></div>
+
+<style>
+  .section-divider {
+    position: relative;
+    height: 2px;
+    width: 100%;
+    background: var(--brand-gradient);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* moving highlight streak */
+  .section-divider::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 22%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.9) 50%,
+      transparent 100%
+    );
+    transform: translateX(-160%);
+    animation: divider-sweep 5.5s ease-in-out infinite;
+  }
+  /* sweep across, then hold off-screen for a brief pause */
+  @keyframes divider-sweep {
+    0% { transform: translateX(-160%); }
+    45% { transform: translateX(560%); }
+    100% { transform: translateX(560%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .section-divider::after { display: none; }
+  }
+</style>

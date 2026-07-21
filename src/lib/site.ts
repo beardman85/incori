@@ -64,7 +64,6 @@ export const footerLinks: NavLink[] = [
 export type SocialLink = { label: string; href: string; icon: 'facebook' | 'instagram' | 'twitter' | 'linkedin' };
 
 export const social: SocialLink[] = [
-  { label: 'Facebook', href: 'https://www.facebook.com/', icon: 'facebook' },
-  { label: 'Instagram', href: 'https://www.instagram.com/', icon: 'instagram' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/', icon: 'linkedin' },
+  { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61573168157552', icon: 'facebook' },
+  { label: 'Instagram', href: 'https://www.instagram.com/inclusion_oriented/', icon: 'instagram' },
 ];

@@ -11,10 +11,6 @@ const values = (await getCollection('values')).sort((a, b) => a.data.order - b.d
   <div class="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-azure/10 blur-3xl" aria-hidden="true"></div>
   <div class="pointer-events-none absolute bottom-0 left-1/4 h-80 w-80 rounded-full bg-ember/10 blur-3xl" aria-hidden="true"></div>
 
-  <!-- Soft fades easing the dark band into the light sections above & below -->
-  <div class="pointer-events-none absolute inset-x-0 top-0 h-28 fade-fog-down" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 fade-fog-up" aria-hidden="true"></div>
-
   <div class="container-page relative">
     <SectionHeading
       titleId="values-title"
