@@ -84,35 +84,44 @@ const {
     };
     const hide = (el: HTMLElement) => { el.classList.add('hidden'); el.classList.remove('flex'); };
     const show = (el: HTMLElement) => { el.classList.remove('hidden'); el.classList.add('flex'); };
+    let submitting = false;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (submitting) return;
       hide(errorBox);
-      // Native validation
+      hide(successBox);
+      // Manual validation (form has novalidate)
       if (!form.checkValidity()) { form.reportValidity(); return; }
-      // Honeypot: pretend success
+      // Honeypot: silently accept, don't send
       if ((form.querySelector('[name="company"]') as HTMLInputElement)?.value) {
-        hide(errorBox); show(successBox); form.reset(); return;
+        show(successBox); form.reset(); return;
       }
+
+      submitting = true;
       setLoading(true);
+      // Safety net: never let the button spin forever.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
       try {
         const data = Object.fromEntries(new FormData(form).entries());
         const res = await fetch('/api/contact', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
+          signal: controller.signal,
         });
-        if (!res.ok) throw new Error(String(res.status));
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        form.reset();
         show(successBox);
-        form.querySelectorAll('input, textarea, select').forEach((c) => {
-          if ((c as HTMLInputElement).type !== 'hidden') form.reset();
-        });
         successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (err) {
         errorMsg.textContent = 'Something went wrong sending your message. Please try again, or call us at 531-225-5858.';
         show(errorBox);
       } finally {
+        clearTimeout(timer);
         setLoading(false);
+        submitting = false;
       }
     });
   });
