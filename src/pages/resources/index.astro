@@ -1,8 +1,141 @@
 ---
-import PageStub from '~/components/PageStub.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionDivider from '~/components/SectionDivider.astro';
+import SectionHeading from '~/components/SectionHeading.astro';
+import CtaBanner from '~/components/CtaBanner.astro';
+import Reveal from '~/components/Reveal.astro';
+import Button from '~/components/Button.astro';
+import Icon from '~/components/Icon.astro';
+
+const featured = [
+  {
+    icon: 'file-text',
+    tag: 'November 2023 Training',
+    title: 'Shared Living Provider',
+    text: 'Essential training materials and updates for Shared Living Providers. Stay informed about the latest policies, procedures, and best practices.',
+    href: '/documents/SLP-Training-November-2023.pdf',
+  },
+  {
+    icon: 'file-text',
+    tag: 'November 2023 Bulletin',
+    title: 'Family Support Waiver',
+    text: 'A comprehensive guide to family support waiver services and the process for provider enrollment — key to understanding available services and how to become a provider.',
+    href: '/documents/FSW-Services-and-Provider-Enrollment.pdf',
+  },
+];
+
+const partners = [
+  { name: 'The Arc of Nebraska', href: 'https://www.arc-nebraska.org/' },
+  { name: 'Special Olympics Nebraska', href: 'https://www.sone.org/' },
+  { name: 'Autism Society of Nebraska', href: 'https://autismnebraska.org/' },
+  { name: 'Disability Rights Nebraska', href: 'https://www.disabilityrightsnebraska.org/' },
+];
 ---
-<PageStub
+<BaseLayout
   title="Resources"
-  eyebrow="Support & Resources"
-  description="Access essential documents, tools, and information for individuals with disabilities, their families, and providers."
-/>
+  description="Documents, tools, and trusted partner organizations to help individuals with disabilities, their families, and providers navigate services in Nebraska."
+>
+  <PageHero
+    eyebrow="Support & Resources"
+    title={`Resources to help you <span class="text-gradient">navigate & thrive.</span>`}
+    intro="Explore documents, tools, and information designed to support individuals with disabilities, their families, and caregivers — and to help you navigate services within our community."
+  />
+
+  <SectionDivider />
+
+  <!-- HCBS Waiver eligibility -->
+  <section class="bg-white py-20 md:py-24" aria-labelledby="waiver-title">
+    <div class="container-page">
+      <Reveal class="relative overflow-hidden rounded-3xl bg-fog p-8 ring-1 ring-charcoal/8 md:p-12">
+        <div class="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-brand-gradient opacity-10 blur-2xl" aria-hidden="true"></div>
+        <div class="relative grid gap-8 lg:grid-cols-12 lg:items-center">
+          <div class="lg:col-span-8">
+            <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-gradient text-white shadow-lg">
+              <Icon name="shield" size={28} />
+            </span>
+            <h2 id="waiver-title" class="mt-5 text-h2 font-semibold text-charcoal">HCBS Waiver Certified Provider</h2>
+            <p class="mt-4 max-w-2xl text-lead text-steel">
+              Inclusion Oriented is a certified provider under the Developmental Disabilities HCBS
+              Waiver. To receive services, a participant must be eligible under the waiver. The
+              Nebraska DHHS Division of Developmental Disabilities can guide you through eligibility
+              and the enrollment process.
+            </p>
+          </div>
+          <div class="lg:col-span-4 lg:justify-self-end">
+            <Button href="https://dhhs.ne.gov/Pages/DD-Eligibility.aspx" variant="secondary" icon="external" class="w-full sm:w-auto" target="_blank" rel="noopener">Check waiver eligibility</Button>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- Featured Resources -->
+  <section class="bg-fog py-20 md:py-24" aria-labelledby="featured-title">
+    <div class="container-page">
+      <SectionHeading
+        titleId="featured-title"
+        eyebrow="Featured Resources"
+        title="Provider documents &amp; training"
+        intro="Key guides and training materials for DHHS-DDD participants, families, and providers."
+      />
+      <div class="mt-14 grid gap-6 md:grid-cols-2">
+        {featured.map((r) => (
+          <Reveal>
+            <div class="flex h-full flex-col rounded-2xl bg-white p-7 shadow-sm ring-1 ring-charcoal/8">
+              <div class="flex items-center gap-4">
+                <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow">
+                  <Icon name={r.icon} size={24} />
+                </span>
+                <span class="inline-flex items-center rounded-full bg-fog px-3 py-1 text-xs font-semibold uppercase tracking-wider text-steel ring-1 ring-charcoal/8">{r.tag}</span>
+              </div>
+              <h3 class="mt-5 text-h3 font-semibold text-charcoal">{r.title}</h3>
+              <p class="mt-2 flex-1 leading-relaxed text-steel">{r.text}</p>
+              <div class="mt-6">
+                <Button href={r.href} variant="secondary" size="sm" icon="download" target="_blank" rel="noopener">Download PDF</Button>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner organizations -->
+  <section class="bg-white py-20 md:py-24" aria-labelledby="partners-title">
+    <div class="container-page">
+      <SectionHeading
+        titleId="partners-title"
+        eyebrow="A Few of Our Partners"
+        title="Parent training &amp; information"
+        intro="Trusted Nebraska organizations offering advocacy, education, and support for individuals with disabilities and their families."
+      />
+      <div class="mt-14 grid gap-4 sm:grid-cols-2">
+        {partners.map((p) => (
+          <Reveal>
+            <a
+              href={p.href}
+              target="_blank"
+              rel="noopener"
+              class="group flex items-center justify-between gap-4 rounded-2xl bg-fog p-6 ring-1 ring-charcoal/8 transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-azure"
+            >
+              <span class="flex items-center gap-4">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow"><Icon name="book" size={22} /></span>
+                <span class="font-display text-lg font-semibold text-charcoal">{p.name}</span>
+              </span>
+              <Icon name="external" size={20} class="text-steel transition-colors group-hover:text-cyan-deep" />
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <CtaBanner
+    id="resources-cta"
+    title={`Need help getting <span class="text-gradient">started?</span>`}
+    intro="Our team can walk you through eligibility, services, and next steps — reach out any time."
+  />
+</BaseLayout>
