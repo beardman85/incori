@@ -164,6 +164,26 @@
     background: var(--brand-gradient);
   }
 
+  /* Legal / long-form content pages */
+  .legal h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-charcoal);
+    font-size: 1.4rem;
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .legal h2:first-child { margin-top: 0; }
+  .legal h3 { font-weight: 600; color: var(--color-charcoal); margin-top: 1.6rem; margin-bottom: 0.35rem; }
+  .legal p { color: var(--color-steel); line-height: 1.7; margin-top: 0.9rem; }
+  .legal ul { margin-top: 0.9rem; display: grid; gap: 0.55rem; padding-left: 1.4rem; list-style: disc; color: var(--color-steel); }
+  .legal li { line-height: 1.65; padding-left: 0.25rem; }
+  .legal li::marker { color: var(--color-cyan-deep); }
+  .legal a { color: var(--color-cyan-deep); text-decoration: underline; text-underline-offset: 2px; }
+  .legal a:hover { color: var(--color-charcoal); }
+  .legal strong { color: var(--color-charcoal); font-weight: 600; }
+
   /* Skip link — hidden until focused */
   .skip-link {
     position: absolute;
