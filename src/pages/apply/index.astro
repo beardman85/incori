@@ -1,8 +1,84 @@
 ---
-import PageStub from '~/components/PageStub.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionDivider from '~/components/SectionDivider.astro';
+import Reveal from '~/components/Reveal.astro';
+import Icon from '~/components/Icon.astro';
+import LeadForm from '~/components/form/LeadForm.astro';
+import Field from '~/components/form/Field.astro';
+import { contact } from '~/lib/site';
+
+const roles = [
+  { value: 'direct-support-professional', label: 'Direct Support Professional' },
+  { value: 'residential-staff', label: 'Residential Staff' },
+  { value: 'day-services-staff', label: 'Day Services Staff' },
+  { value: 'administrative', label: 'Administrative / Office' },
+  { value: 'other', label: 'Other / Not sure' },
+];
+const perks = [
+  'Competitive pay & full benefits',
+  'Ongoing training & career growth',
+  'Flexible, full- or part-time scheduling',
+  'Meaningful, mission-driven work',
+];
 ---
-<PageStub
+<BaseLayout
   title="Apply Today"
-  eyebrow="Join Our Team"
-  description="Ready to make a difference? Apply to become part of the Inclusion Oriented team."
-/>
+  description="Apply to join the Inclusion Oriented team in Omaha, NE — a compassionate community empowering individuals with disabilities, with great pay, benefits, and growth."
+>
+  <PageHero
+    eyebrow="Join Our Team"
+    title={`Start making a <span class="text-gradient">difference today.</span>`}
+    intro="Ready for a rewarding career where your passion and skills change lives? Tell us about yourself and we'll be in touch about opportunities that fit."
+  />
+
+  <SectionDivider />
+
+  <section class="bg-fog py-16 md:py-24" aria-labelledby="apply-form">
+    <div class="container-page grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <div class="lg:col-span-7">
+        <h2 id="apply-form" class="sr-only">Application form</h2>
+        <LeadForm
+          formType="apply"
+          submitLabel="Submit application"
+          successTitle="Application received!"
+          successMessage="Thanks for your interest — our team will review your details and reach out soon."
+        >
+          <Field name="name" label="Full name" required autocomplete="name" placeholder="Jane Doe" />
+          <Field name="email" label="Email" type="email" required autocomplete="email" placeholder="jane@example.com" />
+          <Field name="phone" label="Phone" type="tel" required autocomplete="tel" placeholder="(531) 555-0123" />
+          <Field name="role" label="Role of interest" type="select" placeholder="Select a role" options={roles} />
+          <Field name="message" label="Tell us about yourself" type="textarea" full placeholder="Share your experience, availability, and why you'd like to join…" />
+        </LeadForm>
+        <p class="mt-4 text-sm text-steel">
+          Prefer to send a resume? Email it to
+          <a href={contact.emailHref} class="font-medium text-cyan-deep hover:underline">{contact.email}</a>.
+        </p>
+      </div>
+
+      <aside class="lg:col-span-5">
+        <Reveal>
+          <div class="rounded-3xl bg-charcoal p-7 text-white shadow-xl sm:p-8">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-gradient text-white shadow-lg"><Icon name="star" size={26} /></span>
+            <h2 class="mt-5 text-h3 font-semibold">Why you'll love it here</h2>
+            <ul class="mt-5 space-y-3">
+              {perks.map((p) => (
+                <li class="flex items-start gap-3 text-white/85">
+                  <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-gradient text-white"><Icon name="check" size={14} /></span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-8 border-t border-white/10 pt-6">
+              <p class="text-white/70">Questions about a role?</p>
+              <a href={contact.phoneHref} class="mt-2 inline-flex items-center gap-3 font-semibold text-white hover:text-cyan focus-visible:outline-cyan">
+                <span class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-cyan"><Icon name="phone" size={17} /></span>
+                {contact.phone}
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

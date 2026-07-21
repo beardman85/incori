@@ -1,8 +1,80 @@
 ---
-import PageStub from '~/components/PageStub.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionDivider from '~/components/SectionDivider.astro';
+import Reveal from '~/components/Reveal.astro';
+import Icon from '~/components/Icon.astro';
+import LeadForm from '~/components/form/LeadForm.astro';
+import Field from '~/components/form/Field.astro';
+import { contact } from '~/lib/site';
+
+const availability = [
+  { value: 'weekdays', label: 'Weekdays' },
+  { value: 'weekends', label: 'Weekends' },
+  { value: 'evenings', label: 'Evenings' },
+  { value: 'flexible', label: 'Flexible' },
+];
+const ways = [
+  { icon: 'users', t: 'Community events', d: 'Help at outings, activities, and community gatherings.' },
+  { icon: 'heart', t: 'Companionship', d: 'Spend meaningful time with the individuals we serve.' },
+  { icon: 'star', t: 'Skills & mentoring', d: 'Share a talent, hobby, or professional skill.' },
+];
 ---
-<PageStub
+<BaseLayout
   title="Volunteer Today"
-  eyebrow="Give Back"
-  description="Share your time and compassion. Learn how you can volunteer with Inclusion Oriented."
-/>
+  description="Volunteer with Inclusion Oriented in Omaha, NE. Share your time and compassion to help individuals with disabilities live fuller, more connected lives."
+>
+  <PageHero
+    eyebrow="Give Back"
+    title={`Share your time, <span class="text-gradient">change a life.</span>`}
+    intro="Volunteers help the individuals we serve build connections, learn new skills, and feel a genuine sense of belonging. Tell us how you'd like to help."
+  />
+
+  <SectionDivider />
+
+  <section class="bg-fog py-16 md:py-24" aria-labelledby="volunteer-form">
+    <div class="container-page grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <div class="lg:col-span-7">
+        <h2 id="volunteer-form" class="sr-only">Volunteer form</h2>
+        <LeadForm
+          formType="volunteer"
+          submitLabel="Submit interest"
+          successTitle="Thank you!"
+          successMessage="We're grateful for your interest — our team will reach out with volunteer opportunities."
+        >
+          <Field name="name" label="Full name" required autocomplete="name" placeholder="Jane Doe" />
+          <Field name="email" label="Email" type="email" required autocomplete="email" placeholder="jane@example.com" />
+          <Field name="phone" label="Phone" type="tel" autocomplete="tel" placeholder="(531) 555-0123" />
+          <Field name="availability" label="Availability" type="select" placeholder="Select availability" options={availability} />
+          <Field name="message" label="How would you like to help?" type="textarea" full placeholder="Tell us about your interests, skills, or availability…" />
+        </LeadForm>
+      </div>
+
+      <aside class="lg:col-span-5">
+        <Reveal>
+          <div class="rounded-3xl bg-charcoal p-7 text-white shadow-xl sm:p-8">
+            <h2 class="text-h3 font-semibold">Ways to get involved</h2>
+            <ul class="mt-6 space-y-5">
+              {ways.map((w) => (
+                <li class="flex gap-4">
+                  <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow"><Icon name={w.icon} size={22} /></span>
+                  <span>
+                    <span class="block font-semibold text-white">{w.t}</span>
+                    <span class="mt-0.5 block text-sm text-white/65">{w.d}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-8 border-t border-white/10 pt-6">
+              <p class="text-white/70">Questions?</p>
+              <a href={contact.phoneHref} class="mt-2 inline-flex items-center gap-3 font-semibold text-white hover:text-cyan focus-visible:outline-cyan">
+                <span class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-cyan"><Icon name="phone" size={17} /></span>
+                {contact.phone}
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

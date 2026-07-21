@@ -1,0 +1,119 @@
+---
+import Icon from '~/components/Icon.astro';
+/**
+ * Progressive-enhancement lead form. Renders a <form> that posts JSON to
+ * /api/contact (a Cloudflare Pages Function). The default slot holds Field
+ * components. Includes a honeypot and accessible loading/success/error states.
+ */
+interface Props {
+  formType: string;
+  submitLabel?: string;
+  successTitle?: string;
+  successMessage?: string;
+}
+const {
+  formType,
+  submitLabel = 'Submit',
+  successTitle = 'Thank you!',
+  successMessage = "We've received your message and will be in touch soon.",
+} = Astro.props;
+---
+<form
+  class="lead-form rounded-3xl bg-white p-6 shadow-xl ring-1 ring-charcoal/8 sm:p-8"
+  method="post"
+  action="/api/contact"
+  data-lead-form
+  novalidate
+>
+  <input type="hidden" name="formType" value={formType} />
+  <!-- Honeypot: hidden from users, catches bots -->
+  <div class="absolute left-[-9999px]" aria-hidden="true">
+    <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <slot />
+  </div>
+
+  <div class="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-steel">We'll never share your information.</p>
+    <button
+      type="submit"
+      class="bg-brand-gradient group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-8 py-3.5 font-semibold text-white shadow-lg shadow-cyan-deep/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-azure disabled:cursor-not-allowed disabled:opacity-70"
+      data-submit
+    >
+      <span data-label>{submitLabel}</span>
+      <svg data-spinner class="hidden h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
+        <path class="opacity-90" d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+      </svg>
+      <Icon name="arrow" size={18} class="transition-transform duration-300 group-hover:translate-x-0.5" data-arrow />
+    </button>
+  </div>
+
+  <!-- Status messages -->
+  <div class="mt-5" aria-live="polite">
+    <div data-success class="hidden items-start gap-3 rounded-2xl bg-fog p-5 ring-1 ring-cyan/30">
+      <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-gradient text-white"><Icon name="check" size={18} /></span>
+      <span>
+        <span class="block font-display font-semibold text-charcoal">{successTitle}</span>
+        <span class="mt-0.5 block text-[0.95rem] text-steel">{successMessage}</span>
+      </span>
+    </div>
+    <div data-error class="hidden items-start gap-3 rounded-2xl bg-crimson/8 p-5 text-crimson ring-1 ring-crimson/25">
+      <span class="text-[0.95rem]" data-error-msg>Something went wrong. Please try again, or call us at 531-225-5858.</span>
+    </div>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll('[data-lead-form]').forEach((formEl) => {
+    const form = formEl as HTMLFormElement;
+    const btn = form.querySelector('[data-submit]') as HTMLButtonElement;
+    const label = form.querySelector('[data-label]') as HTMLElement;
+    const spinner = form.querySelector('[data-spinner]') as HTMLElement;
+    const arrow = form.querySelector('[data-arrow]') as HTMLElement;
+    const successBox = form.querySelector('[data-success]') as HTMLElement;
+    const errorBox = form.querySelector('[data-error]') as HTMLElement;
+    const errorMsg = form.querySelector('[data-error-msg]') as HTMLElement;
+
+    const setLoading = (on: boolean) => {
+      btn.disabled = on;
+      spinner.classList.toggle('hidden', !on);
+      arrow.classList.toggle('hidden', on);
+    };
+    const hide = (el: HTMLElement) => { el.classList.add('hidden'); el.classList.remove('flex'); };
+    const show = (el: HTMLElement) => { el.classList.remove('hidden'); el.classList.add('flex'); };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hide(errorBox);
+      // Native validation
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      // Honeypot: pretend success
+      if ((form.querySelector('[name="company"]') as HTMLInputElement)?.value) {
+        hide(errorBox); show(successBox); form.reset(); return;
+      }
+      setLoading(true);
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        show(successBox);
+        form.querySelectorAll('input, textarea, select').forEach((c) => {
+          if ((c as HTMLInputElement).type !== 'hidden') form.reset();
+        });
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (err) {
+        errorMsg.textContent = 'Something went wrong sending your message. Please try again, or call us at 531-225-5858.';
+        show(errorBox);
+      } finally {
+        setLoading(false);
+      }
+    });
+  });
+</script>

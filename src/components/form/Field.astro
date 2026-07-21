@@ -1,0 +1,54 @@
+---
+/**
+ * Styled form field: text / email / tel / textarea / select.
+ */
+interface Props {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'textarea' | 'select';
+  required?: boolean;
+  placeholder?: string;
+  autocomplete?: string;
+  rows?: number;
+  value?: string;
+  options?: { value: string; label: string }[];
+  full?: boolean;
+}
+const {
+  name,
+  label,
+  type = 'text',
+  required = false,
+  placeholder,
+  autocomplete,
+  rows = 5,
+  value = '',
+  options = [],
+  full = false,
+} = Astro.props;
+const id = `f-${name}`;
+const control =
+  'w-full rounded-xl bg-white px-4 py-3 text-charcoal ring-1 ring-charcoal/15 transition-shadow placeholder:text-steel/60 focus:outline-none focus:ring-2 focus:ring-azure';
+---
+<div class:list={[full ? 'sm:col-span-2' : '']}>
+  <label for={id} class="mb-1.5 block text-sm font-medium text-charcoal">
+    {label}{required && <span class="text-ember"> *</span>}
+  </label>
+
+  {type === 'textarea' && (
+    <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} class={control}>{value}</textarea>
+  )}
+
+  {type === 'select' && (
+    <select id={id} name={name} required={required} class={control}>
+      <option value="" disabled selected={!value}>{placeholder ?? 'Select an option'}</option>
+      {options.map((o) => (
+        <option value={o.value} selected={value === o.value}>{o.label}</option>
+      ))}
+    </select>
+  )}
+
+  {type !== 'textarea' && type !== 'select' && (
+    <input id={id} name={name} type={type} required={required} placeholder={placeholder} autocomplete={autocomplete} value={value} class={control} />
+  )}
+</div>

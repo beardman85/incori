@@ -1,8 +1,112 @@
 ---
-import PageStub from '~/components/PageStub.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/PageHero.astro';
+import SectionDivider from '~/components/SectionDivider.astro';
+import Reveal from '~/components/Reveal.astro';
+import Icon from '~/components/Icon.astro';
+import LeadForm from '~/components/form/LeadForm.astro';
+import Field from '~/components/form/Field.astro';
+import { contact } from '~/lib/site';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const serviceOptions = [
+  ...services.map((s) => ({ value: s.id, label: s.data.title })),
+  { value: 'not-sure', label: 'Not sure yet — help me decide' },
+];
+
+const steps = [
+  { n: '1', t: 'Reach out', d: 'Share a few details about your needs using the form.' },
+  { n: '2', t: 'We connect', d: 'Our team follows up to understand your goals and answer questions.' },
+  { n: '3', t: 'Build a plan', d: 'Together we create a person-centered plan and get started.' },
+];
 ---
-<PageStub
+<BaseLayout
   title="Request Services"
-  eyebrow="Get Started"
-  description="Start your journey with Inclusion Oriented. Tell us about your needs and our team will guide you through the process."
-/>
+  description="Request developmental-disability support services from Inclusion Oriented in Omaha, NE. Tell us about your needs and our team will guide you through the next steps."
+>
+  <PageHero
+    eyebrow="Get Started"
+    title={`Let's get you the <span class="text-gradient">support you need.</span>`}
+    intro="Tell us a little about yourself or your loved one, and our team will reach out to guide you through services, eligibility, and next steps."
+  />
+
+  <SectionDivider />
+
+  <section class="bg-fog py-16 md:py-24" aria-labelledby="request-form">
+    <div class="container-page grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <!-- Form -->
+      <div class="lg:col-span-7">
+        <h2 id="request-form" class="sr-only">Request services form</h2>
+        <LeadForm
+          formType="request-services"
+          submitLabel="Submit request"
+          successTitle="Request received!"
+          successMessage="Thank you — our team will reach out shortly to help you get started."
+        >
+          <Field name="name" label="Full name" required autocomplete="name" placeholder="Jane Doe" />
+          <Field name="email" label="Email" type="email" required autocomplete="email" placeholder="jane@example.com" />
+          <Field name="phone" label="Phone" type="tel" required autocomplete="tel" placeholder="(531) 555-0123" />
+          <Field name="who" label="Who is this for?" type="select" placeholder="Select one" options={[{ value: 'myself', label: 'Myself' }, { value: 'loved-one', label: 'A loved one' }]} />
+          <Field name="service" label="Service of interest" type="select" full placeholder="Select a service" options={serviceOptions} />
+          <Field name="message" label="How can we help?" type="textarea" full placeholder="Tell us a bit about your needs or questions…" />
+        </LeadForm>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-5">
+        <Reveal>
+          <div class="rounded-3xl bg-charcoal p-7 text-white shadow-xl sm:p-8">
+            <h2 class="text-h3 font-semibold">Prefer to talk?</h2>
+            <p class="mt-2 text-white/70">We're happy to answer questions by phone or email.</p>
+            <ul class="mt-5 space-y-3">
+              <li>
+                <a href={contact.phoneHref} class="group inline-flex items-center gap-3 text-white/90 hover:text-white focus-visible:outline-cyan">
+                  <span class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-cyan"><Icon name="phone" size={18} /></span>
+                  {contact.phone}
+                </a>
+              </li>
+              <li>
+                <a href={contact.emailHref} class="group inline-flex items-center gap-3 text-white/90 hover:text-white focus-visible:outline-cyan">
+                  <span class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-cyan"><Icon name="mail" size={18} /></span>
+                  {contact.email}
+                </a>
+              </li>
+              <li>
+                <span class="inline-flex items-start gap-3 text-white/90">
+                  <span class="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/10 text-cyan"><Icon name="map-pin" size={18} /></span>
+                  <span>{contact.address.street}<br />{contact.address.city}, {contact.address.state} {contact.address.zip}</span>
+                </span>
+              </li>
+            </ul>
+
+            <div class="mt-8 border-t border-white/10 pt-7">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-cyan">What happens next</h3>
+              <ol class="mt-4 space-y-4">
+                {steps.map((s) => (
+                  <li class="flex gap-4">
+                    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-gradient font-display text-sm font-semibold text-white">{s.n}</span>
+                    <span>
+                      <span class="block font-semibold text-white">{s.t}</span>
+                      <span class="mt-0.5 block text-sm text-white/65">{s.d}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </Reveal>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Pre-select the service dropdown from a ?service=<slug> query param.
+  const params = new URLSearchParams(location.search);
+  const service = params.get('service');
+  if (service) {
+    const sel = document.querySelector('#f-service') as HTMLSelectElement | null;
+    if (sel && [...sel.options].some((o) => o.value === service)) sel.value = service;
+  }
+</script>
