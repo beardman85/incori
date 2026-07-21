@@ -33,7 +33,7 @@ The form endpoint (`/api/contact`) is built and live, but needs an email sender.
    (Production, and Preview if you want):
    - `RESEND_API_KEY` = *your Resend key*
    - `CONTACT_TO` = `hello@incori.org`
-   - `CONTACT_FROM` = a verified sender, e.g. `website@incori.org`
+   - `CONTACT_FROM` = `Inclusion Oriented <no-reply@incori.org>` (a Resend-verified sender; the no-reply mailbox need not exist)
 5. **Redeploy** (Deployments → Retry deployment) so the vars take effect.
 6. Submit each form (Request Services, Apply, Volunteer) and confirm the email
    arrives at `hello@incori.org`.

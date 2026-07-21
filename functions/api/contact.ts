@@ -5,7 +5,7 @@
  * Required environment variables (set in the Cloudflare Pages dashboard):
  *   RESEND_API_KEY  — Resend API key
  *   CONTACT_TO      — where submissions are sent (e.g. hello@incori.org)
- *   CONTACT_FROM    — a verified Resend sender (e.g. website@incori.org)
+ *   CONTACT_FROM    — a verified Resend sender, e.g. "Inclusion Oriented <no-reply@incori.org>"
  *
  * Until RESEND_API_KEY is set, the endpoint accepts submissions and returns
  * ok:true with delivered:false (so the form UI works), and logs a warning.
@@ -110,7 +110,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: env.CONTACT_FROM || 'website@incori.org',
+        from: env.CONTACT_FROM || 'Inclusion Oriented <no-reply@incori.org>',
         to: [env.CONTACT_TO || 'hello@incori.org'],
         reply_to: email,
         subject,
