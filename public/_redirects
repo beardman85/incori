@@ -1,0 +1,13 @@
+# Cloudflare Pages redirects — preserve SEO/links from the old WordPress site.
+# Format: /source  /destination  [status]
+# Most old slugs (about, services, request-services, apply, work-with-us,
+# volunteer, resources) are unchanged, so only the renamed/removed ones need mapping.
+
+/join-our-team/    /work-with-us/    301
+/join-our-team     /work-with-us/    301
+/hello-world/      /                 301
+/hello-world       /                 301
+
+# Old WordPress admin/feed paths -> home (avoid stray 404s from crawlers)
+/feed/             /                 301
+/feed              /                 301
