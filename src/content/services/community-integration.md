@@ -1,5 +1,6 @@
 ---
 title: "Community Integration"
+subtitle: "Building Connections and Enhancing Independence"
 order: 2
 icon: "community"
 summary: "Building self-help, social, and adaptive skills out in the community."

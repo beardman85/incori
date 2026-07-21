@@ -142,6 +142,28 @@
 
   .bg-brand-gradient { background-image: var(--brand-gradient); }
 
+  /* Rich text (rendered markdown) for service/content bodies */
+  .rich-text > * + * { margin-top: 1.05rem; }
+  .rich-text p { color: var(--color-steel); }
+  .rich-text strong { color: var(--color-charcoal); font-weight: 600; }
+  .rich-text ul { display: grid; gap: 0.7rem; margin-top: 1.1rem; }
+  .rich-text li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--color-steel);
+    line-height: 1.55;
+  }
+  .rich-text li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 9999px;
+    background: var(--brand-gradient);
+  }
+
   /* Skip link — hidden until focused */
   .skip-link {
     position: absolute;

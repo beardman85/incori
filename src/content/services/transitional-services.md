@@ -1,5 +1,6 @@
 ---
 title: "Transitional Services"
+subtitle: "Smooth Transitions to Independent Living"
 order: 9
 icon: "transitional"
 summary: "Skills and resources for moving toward more independent living."

@@ -1,5 +1,6 @@
 ---
 title: "Day Support"
+subtitle: "Structured Day Programs for Personal Growth"
 order: 3
 icon: "day-support"
 summary: "Structured day activities focused on skills and well-being."

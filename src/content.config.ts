@@ -24,6 +24,7 @@ const services = defineCollection({
   loader: glob({ base: './src/content/services', pattern: '**/*.md' }),
   schema: z.object({
     title: z.string(),
+    subtitle: z.string().optional(), // descriptive tagline shown above the title
     order: z.number(),
     summary: z.string(), // one-line, used on cards
     icon: iconKey,

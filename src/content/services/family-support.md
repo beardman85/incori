@@ -1,5 +1,6 @@
 ---
 title: "Family Support"
+subtitle: "Guidance and Resources for Families"
 order: 5
 icon: "family"
 summary: "Resources, training, and guidance for families and caregivers."

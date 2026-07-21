@@ -1,5 +1,6 @@
 ---
 title: "Adult Day Services"
+subtitle: "Engaging Day Activities for Enhanced Well-Being"
 order: 1
 icon: "adult-day"
 summary: "A safe, supervised environment for meaningful daytime activities."

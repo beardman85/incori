@@ -1,5 +1,6 @@
 ---
 title: "Supported Family Living"
+subtitle: "Tailored Support in the Family Home"
 order: 8
 icon: "supported-living"
 summary: "Individualized teaching and support in the family home."
